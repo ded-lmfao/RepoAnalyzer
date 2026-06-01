@@ -1,0 +1,14 @@
+{
+  "name": "repo-analyze-marketplace",
+  "owner": { "name": "YOUR_NAME" },
+  "metadata": {
+    "description": "Marketplace hosting the repo-analyze repository-intelligence plugin."
+  },
+  "plugins": [
+    {
+      "name": "repo-analyze",
+      "source": "./plugins/repo-analyze",
+      "description": "Repository intelligence engine — turns any repo (any language) into a durable, token-efficient knowledge graph with an exact file:line symbol index, so an AI can answer questions and plan precise code changes cheaply."
+    }
+  ]
+}

@@ -13,11 +13,11 @@ A Claude Code plugin that turns **any repository, in any language**, into a dura
 ## Install
 
 ```text
-/plugin marketplace add YOUR_GITHUB_USERNAME/repo-analyze-marketplace
+/plugin marketplace add ded-lmfao/repo-analyze-marketplace
 /plugin install repo-analyze@repo-analyze-marketplace
 ```
 
-> Replace `YOUR_GITHUB_USERNAME` with the account you push this repo to.
+> Replace `ded-lmfao` with the account you push this repo to.
 
 After install, reload skills (or restart Claude Code).
 

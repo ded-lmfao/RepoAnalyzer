@@ -1,0 +1,15 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local Claude Code state (do not ship per-machine settings)
+.claude/settings.local.json
+
+# Generated knowledge graphs from local testing
+.claude/repo-knowledge/
+
+# Logs
+*.log

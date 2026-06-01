@@ -2,7 +2,13 @@
   "name": "repo-analyze",
   "version": "2.0.0",
   "description": "Repository intelligence engine. Converts any codebase (Go, Python, TS/JS, Rust, C/C++, Java, and more) into a durable, compressed knowledge graph stored in .claude/repo-knowledge/ — including an exact file:line symbol index, change-propagation chains, and invariants — so an AI can answer questions, assess impact, and plan precise edits without re-reading source.",
-  "author": { "name": "JustNixx" },
+  "author": {
+    "name": "JustNixx",
+    "url": "https://github.com/ded-lmfao"
+  },
+  "homepage": "https://github.com/ded-lmfao/jinxx-repo-analyzer",
+  "repository": "https://github.com/ded-lmfao/jinxx-repo-analyzer",
+  "license": "MIT",
   "keywords": [
     "repository-analysis",
     "codebase-understanding",

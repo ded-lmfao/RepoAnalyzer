@@ -1,14 +1,34 @@
 {
-  "name": "repo-analyze-marketplace",
-  "owner": { "name": "JustNixx" },
+  "name": "repo-analyze",
+  "owner": {
+    "name": "JustNixx",
+    "url": "https://github.com/ded-lmfao"
+  },
   "metadata": {
-    "description": "Marketplace hosting the repo-analyze repository-intelligence plugin."
+    "description": "Marketplace hosting the repo-analyze repository-intelligence plugin for Claude Code.",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "repo-analyze",
       "source": "./plugins/repo-analyze",
-      "description": "Repository intelligence engine — turns any repo (any language) into a durable, token-efficient knowledge graph with an exact file:line symbol index, so an AI can answer questions and plan precise code changes cheaply."
+      "version": "2.0.0",
+      "description": "Repository intelligence engine — turns any repo (any language) into a durable, token-efficient knowledge graph with an exact file:line symbol index, so an AI can answer questions and plan precise code changes cheaply.",
+      "author": {
+        "name": "JustNixx",
+        "url": "https://github.com/ded-lmfao"
+      },
+      "homepage": "https://github.com/ded-lmfao/jinxx-repo-analyzer",
+      "license": "MIT",
+      "category": "developer-tools",
+      "keywords": [
+        "repository-analysis",
+        "codebase-understanding",
+        "knowledge-graph",
+        "code-navigation",
+        "impact-analysis",
+        "token-efficiency"
+      ]
     }
   ]
 }

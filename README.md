@@ -181,6 +181,10 @@ Expand-Archive .\repoanalyzer-antigravity-<version>.zip -DestinationPath "$HOME\
 The archive extracts directly to `.agents/skills/repo-analyze/` or
 `~/.gemini/config/skills/repo-analyze/`. Start a new Antigravity conversation after installation.
 
+Releases are automated from pushes to `main` or `master`. The workflow creates `v<package.json version>` when that
+tag does not exist, then the resulting tag run publishes both release artifacts. Bump `package.json` before pushing
+when you want a new release.
+
 ### Add from a checkout
 
 ```powershell

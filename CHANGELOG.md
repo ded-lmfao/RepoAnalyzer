@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - Renamed the public project and Copilot extension branding to RepoAnalyzer.
 - Added uninstall instructions for Claude Code, GitHub Copilot, and Antigravity.
+- Release workflow now creates missing version tags automatically on main/master pushes.
 
 ### Added
 - GitHub Actions release workflow publishing Copilot VSIX and Antigravity skill archives from version tags.

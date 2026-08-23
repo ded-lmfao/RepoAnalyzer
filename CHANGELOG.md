@@ -11,6 +11,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added uninstall instructions for Claude Code, GitHub Copilot, and Antigravity.
 
 ### Added
+- GitHub Actions release workflow publishing Copilot VSIX and Antigravity skill archives from version tags.
 - VS Code extension manifest with `contributes.chatSkills`, bundling the repository intelligence skill for GitHub Copilot installation.
 - GitHub Copilot instruction adapter at `adapters/github-copilot/repo-analyze.instructions.md`.
 - Antigravity Agent Skills installer for workspace and global installation.

@@ -1,6 +1,6 @@
 # RepoAnalyzer
 
-> A Claude Code plugin that turns **any repository, in any language**, into a durable, token-efficient **knowledge graph** — so an AI assistant can understand the codebase deeply and make **precise, safe code changes** without re-reading source on every request.
+> A cross-assistant repository intelligence layer that turns **any repository, in any language**, into a durable, token-efficient **knowledge graph** — so Claude Code, GitHub Copilot, and Antigravity can understand the codebase deeply and make **precise, safe code changes** without re-reading source on every request.
 
 <p align="left">
   <img alt="Version" src="https://img.shields.io/badge/version-2.1.0-blue">
@@ -17,7 +17,7 @@
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Uninstallation](#uninstallation)
+- [Install without cloning](#install-without-cloning)
 - [GitHub Copilot](#github-copilot)
 - [Antigravity](#antigravity)
 - [Quick start](#quick-start)
@@ -70,36 +70,42 @@ To update later:
 /plugin marketplace update repo-analyze
 ```
 
-## Uninstallation
-
-Remove the Claude Code plugin:
+### Uninstall
 
 ```text
 /plugin uninstall repo-analyze@repo-analyze
 ```
 
-Remove the VS Code extension:
+## Install without cloning
 
-```powershell
-code --uninstall-extension justnixx.repoanalyzer-copilot
+Claude Code users can install directly from the public marketplace:
+
+```text
+/plugin marketplace add ded-lmfao/jinxx-repo-analyzer
+/plugin install repo-analyze@repo-analyze
 ```
 
-Remove the copied GitHub Copilot instruction file from the target repository:
+This does not require downloading or cloning the repository locally.
 
-```powershell
-Remove-Item .\.github\instructions\repo-analyze.instructions.md
-```
-
-Remove the Antigravity skill from a workspace or from the global installation:
-
-```powershell
-Remove-Item .\.agents\skills\repo-analyze -Recurse -Force
-Remove-Item "$HOME\.gemini\config\skills\repo-analyze" -Recurse -Force
-```
-
-Uninstallation does not delete `.claude/repo-knowledge/`. Remove that directory separately if you also want to delete the generated repository graph.
+See the [GitHub Copilot](#github-copilot) and [Antigravity](#antigravity) sections for release-based installation.
 
 ## GitHub Copilot
+
+### Add from a release
+
+1. Download `repoanalyzer-copilot-<version>.vsix` from the [latest release](https://github.com/ded-lmfao/jinxx-repo-analyzer/releases/latest).
+2. Install it from a terminal:
+
+```powershell
+code --install-extension .\repoanalyzer-copilot-<version>.vsix
+```
+
+Or open Extensions in VS Code, select the `...` menu, choose **Install from VSIX**, and select the downloaded file.
+
+After installation, open any repository and ask Copilot to analyze or refresh its knowledge graph. The extension
+adds the complete skill bundle and the `/repo-analyze` prompt command.
+
+### Add the instruction adapter
 
 The analysis workflows are also available as a GitHub Copilot instruction adapter. Copy
 [repo-analyze.instructions.md](adapters/github-copilot/repo-analyze.instructions.md) into the target repository's
@@ -114,7 +120,6 @@ npx @vscode/vsce package
 code --install-extension .\repoanalyzer-copilot-2.1.0.vsix
 ```
 
-After installation, open any repository in VS Code and ask Copilot to analyze or refresh its knowledge graph.
 The extension also adds the `/repo-analyze` prompt command, with modes such as `/repo-analyze --update`,
 `/repo-analyze --status`, and `/repo-analyze --change "add rate limiting"`.
 For Marketplace publishing, create a Visual Studio Marketplace publisher, set `publisher` in `package.json` to that
@@ -127,6 +132,20 @@ target-repo/.github/instructions/repo-analyze.instructions.md
 
 Ask Copilot naturally to analyze or refresh the repository, query the graph, assess symbol impact, or plan a change.
 The adapter shares the graph with Claude Code, so either assistant can consume knowledge produced by the other.
+
+### Uninstall
+
+Remove the extension:
+
+```powershell
+code --uninstall-extension justnixx.repoanalyzer-copilot
+```
+
+Remove the instruction adapter if you added it separately:
+
+```powershell
+Remove-Item .\.github\instructions\repo-analyze.instructions.md
+```
 
 ## How RepoAnalyzer compares
 
@@ -144,6 +163,26 @@ RepoAnalyzer complements coding assistants. It gives them a shared, inspectable 
 
 Antigravity supports the open Agent Skills format. Install the complete skill for the current project:
 
+### Add from a release
+
+1. Download `repoanalyzer-antigravity-<version>.zip` from the [latest release](https://github.com/ded-lmfao/jinxx-repo-analyzer/releases/latest).
+2. Extract it into the current workspace:
+
+```powershell
+Expand-Archive .\repoanalyzer-antigravity-<version>.zip -DestinationPath .\.agents\skills -Force
+```
+
+For a global installation, extract it into the global skills directory instead:
+
+```powershell
+Expand-Archive .\repoanalyzer-antigravity-<version>.zip -DestinationPath "$HOME\.gemini\config\skills" -Force
+```
+
+The archive extracts directly to `.agents/skills/repo-analyze/` or
+`~/.gemini/config/skills/repo-analyze/`. Start a new Antigravity conversation after installation.
+
+### Add from a checkout
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\adapters\antigravity\install.ps1 -Scope Workspace
 ```
@@ -157,6 +196,18 @@ powershell -ExecutionPolicy Bypass -File .\adapters\antigravity\install.ps1 -Sco
 See [the Antigravity adapter](adapters/antigravity/README.md) for installation into another project. Start a new
 Antigravity conversation and ask it to analyze or refresh the repository. Antigravity, Copilot, and Claude Code
 share the `.claude/repo-knowledge/` graph.
+
+### Uninstall
+
+Remove the workspace or global skill:
+
+```powershell
+Remove-Item .\.agents\skills\repo-analyze -Recurse -Force
+Remove-Item "$HOME\.gemini\config\skills\repo-analyze" -Recurse -Force
+```
+
+Uninstalling an integration does not delete `.claude/repo-knowledge/`. Remove that directory separately if you also
+want to delete the generated repository graph.
 
 ## Quick start
 

@@ -70,90 +70,25 @@ If none are discovered, write `None identified` — but look hard for multi-tena
 
 ---
 
-Example answers for different project types (replace with real answers for THIS repo):
-
-**Go REST API:**
+One worked example (Go REST API) showing the target density — write the equivalent for THIS repo's stack:
 ```
 Q: What is the entry point and how is the app started?
-A: cmd/server/main.go:L1. Run: make dev (uses air for hot reload) or go run ./cmd/server.
+A: cmd/server/main.go:L1. Run: make dev (air hot reload) or go run ./cmd/server.
 
 Q: How does authentication work?
 A: JWT HS256 in Authorization header. Verified in middleware/auth.go:L14 AuthRequired().
    Claims: {user_id, role, jti}. Access 15min, refresh 7d. Logout blacklists JTI in Redis.
 
 Q: Where are routes registered?
-A: internal/router/router.go. 42 routes grouped by domain under /api/v1/.
-   Public: /auth/*, /health. All others require AuthRequired() middleware.
+A: internal/router/router.go. 42 routes by domain under /api/v1/. Public: /auth/*, /health.
 
 Q: What is the data layer?
-A: PostgreSQL via GORM. Models in internal/models/. Migrations in migrations/ (run manually).
-   Connect via DATABASE_URL env var.
+A: PostgreSQL via GORM. Models in internal/models/. Migrations run manually. Connect via DATABASE_URL.
 
 Q: How do I add a new domain?
 A: 1. Model in internal/models/. 2. Handler in internal/handlers/. 3. Register routes in router.go.
 ```
-
-**Python FastAPI:**
-```
-Q: What is the entry point and how is the app started?
-A: app/main.py:L1. Run: uvicorn app.main:app --reload or docker-compose up.
-
-Q: How does authentication work?
-A: OAuth2 password flow. JWT in Bearer header. Verified via Depends(get_current_user) in app/deps.py:L12.
-   Token generated in app/routers/auth.py:L34.
-
-Q: Where are routes registered?
-A: app/main.py:L18 includes routers. Each domain has its own router in app/routers/.
-   8 routers, all prefixed /api/v1/.
-
-Q: What is the data layer?
-A: PostgreSQL via SQLAlchemy async. Models in app/models/. Alembic migrations in alembic/versions/.
-   Schema managed via SQLALCHEMY_DATABASE_URL env var.
-```
-
-**TypeScript CLI tool (Node):**
-```
-Q: What is the entry point?
-A: src/index.ts:L1 → bin/cli.js after build. Run: npx ts-node src/index.ts or npm run build && ./bin/cli.
-
-Q: How are commands registered?
-A: src/commands/ — one file per command. Registered in src/index.ts:L18 via Commander.js.
-   12 commands total.
-
-Q: How does the tool persist state?
-A: ~/.config/[toolname]/config.json — read/written via src/config.ts:L8.
-
-Q: How do I add a new command?
-A: 1. Create src/commands/mycommand.ts implementing Command interface (src/types.ts:L5).
-   2. Register in src/index.ts:L18.
-```
-
-**Rust library (crate):**
-```
-Q: What is the public API surface?
-A: src/lib.rs re-exports the public types. Key types: [list]. Key functions: [list].
-   Full API in src/lib.rs:L1.
-
-Q: How is the library structured internally?
-A: src/lib.rs (public re-exports) → src/[module].rs (implementations).
-   Feature flags in Cargo.toml control optional dependencies.
-
-Q: How do I run tests?
-A: cargo test. Integration tests in tests/. Doc tests inline in src/lib.rs.
-```
-
-**C embedded/systems:**
-```
-Q: What is the entry point?
-A: src/main.c:L10 main(). Build: make all. Flash: make flash (uses OpenOCD).
-
-Q: How is the project structured?
-A: include/ — all headers (.h). src/ — all implementations (.c).
-   HAL layer in src/hal/ abstracts hardware. Application logic in src/app/.
-
-Q: How does configuration work?
-A: Compile-time: include/config.h #defines. Runtime: config loaded from EEPROM in src/config.c:L12.
-```
+Same shape applies to any stack: entry+run command, auth mechanism+enforcement file:line, route registry+count, data layer+connection env var, the "how to add a feature" pattern, plus 2–3 repo-specific Q&A.
 
 ---
 

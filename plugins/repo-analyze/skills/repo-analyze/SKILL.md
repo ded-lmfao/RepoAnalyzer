@@ -9,6 +9,7 @@ description: Repository intelligence engine. Converts any codebase into a durabl
 **Read once. Compress aggressively. Recall precisely.** Knowledge files are ground truth — never re-read a source file already captured there.
 **Every file read must justify its token cost** with architectural insight not already in the knowledge graph.
 **Prior knowledge always wins.** Check the knowledge store before touching any source file.
+**The store is the deliverable; chat is a receipt.** Tokens printed to chat cost as much as tokens read. Never reprint in chat what was just written to the knowledge store — the user can read those files near-free. A finished build reports a ≤10-line receipt (identity, health, store location, token economy) + a one-line "ask me anything" pointer, not a copy of the graph. Answers to questions stay as tight as the question allows.
 </essential_principles>
 
 <first_run_setup>
@@ -22,8 +23,34 @@ This skill reads many files and writes a knowledge store; without standing permi
 Scope is deliberately narrow: read access + writes confined to `repo-knowledge/`. Never request broad write/edit access to source code.
 </first_run_setup>
 
+<output_style>
+**All chat output is caveman-terse.** This compounds the receipt principle: that rule cuts *what* prints, this cuts *how* it is phrased. Roughly 75% fewer words, zero technical loss.
+
+- Drop articles (a/an/the), filler (just/really/basically/simply/actually), pleasantries, hedging. Fragments OK. `[thing] [state] [reason].` over full sentences.
+- Short synonyms: "big" not "extensive", "fix" not "implement a solution for".
+- Receipts, change plans, impact reports, status, and free-form answers all use this voice.
+
+**Intensity levels** (mirror caveman; default = full). Pick from the invocation or honor an active caveman level if one is set for the session:
+- `lite` — professional but tight: no filler, keep articles + full sentences.
+- `full` — **default**: drop articles, fragments OK, short synonyms.
+- `ultra` — telegraphic: abbreviate prose words only; never abbreviate code symbols, function names, or file:line.
+Select with `--verbosity lite|full|ultra` on any invocation. No level given → full.
+
+**NEVER compress (reproduce exact, unchanged):**
+- file:line refs, file paths, symbol names
+- code blocks, commands, config keys, env var names
+- error strings (quote verbatim)
+- invariants / gotchas / security warnings (full clarity — see SKILL `<escalation_triggers>` and knowledge-store secret rules)
+- the COMMAND REFERENCE FOOTER table (verbatim when printed)
+- irreversible-action confirmations and WIDE/BREAKING blast-radius warnings — write these in plain full sentences so they cannot be misread.
+
+Match the user's language; compress style, not language.
+</output_style>
+
 <phase0_prior_knowledge_check>
 **Run this before loading any workflow. Do not proceed until complete.**
+
+**`--help` short-circuits everything:** print the full footer table from templates/analysis-report.md and stop. No graph, preflight, or workflow needed.
 
 First classify the invocation intent:
 - **BUILD** — bare `/repo-analyze`, `--update`, or `--rebuild`: the goal is to create or refresh the knowledge graph.
@@ -61,8 +88,11 @@ Detect mode from invocation **after** Phase 0 completes:
 | `/repo-analyze --model <name>` | Data model deep-dive | workflows/on-demand.md |
 | `/repo-analyze --module <name>` | Module deep-dive | workflows/on-demand.md |
 | `/repo-analyze --status` | Coverage + freshness report | workflows/status.md |
+| `/repo-analyze --help` | Print the full "🧭 What you can do next" command table and stop | templates/analysis-report.md (footer table only) |
 | `/repo-analyze --change <intent>` | Precise file change plan before editing | workflows/plan-change.md |
 | Any question about the repo (post-analysis) | In-session query | see context_query below |
+
+**Modifier (not a mode):** `--verbosity lite|full|ultra` on any invocation sets output compression level (see `<output_style>`). Default full.
 </operating_modes>
 
 <context_query>
@@ -109,10 +139,7 @@ The moment any workflow hits an error — unreadable file, failed git command, a
 </on_error>
 
 <first_message>
-State before doing anything:
-1. Which mode you are entering and why
-2. What prior knowledge was found (or not)
-3. What you are about to do next
+One line before doing anything: mode + prior-knowledge state + next action. E.g. `Full analysis (no prior graph) — beginning discovery.` or `Incremental (3 files changed) — refreshing.` No multi-line preamble.
 
 Then proceed without waiting for confirmation unless an escalation trigger fires.
 </first_message>

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving **repo-analyze**! Issues and pull requests are welcome.
+Thanks for your interest in improving **RepoAnalyzer**! Issues and pull requests are welcome.
 
 ## Repository layout
 
@@ -8,6 +8,10 @@ Thanks for your interest in improving **repo-analyze**! Issues and pull requests
 .
 ├── .claude-plugin/
 │   └── marketplace.json          # Marketplace manifest (lists the plugin)
+├── package.json                  # VS Code extension manifest (Copilot)
+├── prompts/                      # Copilot slash-style prompt files
+├── adapters/                     # Copilot instruction adapters
+│   └── antigravity/              # Antigravity Agent Skills installer
 ├── plugins/
 │   └── repo-analyze/
 │       ├── .claude-plugin/
@@ -24,6 +28,17 @@ Thanks for your interest in improving **repo-analyze**! Issues and pull requests
 ```
 
 ## Testing a change locally
+
+Build the Copilot package and install it in VS Code:
+
+```powershell
+npx @vscode/vsce package
+code --install-extension .\repoanalyzer-copilot-2.1.0.vsix
+```
+
+The generated VSIX is ignored by Git. Test `/repo-analyze` in Copilot Chat after reloading VS Code.
+
+Test the Antigravity adapter with `adapters/antigravity/install.ps1 -Scope Workspace` in a sample project.
 
 You can install the marketplace straight from a local clone:
 

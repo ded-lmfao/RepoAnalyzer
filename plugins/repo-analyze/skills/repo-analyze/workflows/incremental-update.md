@@ -76,7 +76,8 @@ New Git HEAD: [hash]
 Stale risk: [LOW/MEDIUM/HIGH]
 ```
 
-**Then finish with the COMMAND REFERENCE FOOTER from templates/analysis-report.md** — the "🧭 What you can do next" table — so the user always sees which command to run next.
+**Then finish with the one-liner footer from templates/analysis-report.md** (a graph already existed, so the user has seen the full table — do not reprint it):
+`Next: ask me anything (answered from the graph) · \`--change <intent>\` to plan an edit · \`--status\` for freshness · \`--help\` for all commands.`
 </process>
 
 <success_criteria>

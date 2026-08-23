@@ -1,0 +1,8 @@
+.git/**
+.github/**
+.claude-plugin/**
+adapters/**
+repoanalyzer-copilot-*.vsix
+CONTRIBUTING.md
+CHANGELOG.md
+plugins/repo-analyze/.claude-plugin/**

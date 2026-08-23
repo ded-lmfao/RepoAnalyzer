@@ -171,15 +171,15 @@ This costs a handful of greps and converts the index from "asserted" to "spot-ve
 
 **Remove** `PARTIAL_ANALYSIS` flag from index.md if present (only after 5.5 passes).
 
-**CLAUDE.md integration:**
+**CLAUDE.md integration** (write in caveman prose — this section loads into every session; carve-outs apply):
 - Doesn't exist → create with architecture content, 500 tokens max
 - Exists → append a clearly delimited `## Repo Intelligence` section
 
 Compute health scores using references/health-scoring.md.
 
-Deliver final report using templates/analysis-report.md. Use compact format if repo has fewer than 50 source files. End the report with one **Token economy** line: `Files read: [N] · Symbols grep-indexed: [M] · Knowledge store: ~[K] tokens · Index confidence: [N/M validated]` — this proves the analysis was cheap and spot-verified.
+Deliver the final report using the **RECEIPT format** in templates/analysis-report.md (default for every repo — the graph is on disk, do not reprint it in chat). Expand to DETAIL format only if the user explicitly asked for the full breakdown in chat. The receipt ends with the **Token economy** line — `read [N] files · grep-indexed [M] symbols · store ~[K] tokens (~[P]% smaller than ~[S]-token source) · confidence [N/M]` — proving the analysis was cheap, spot-verified, and what recall now costs vs. re-reading source. `[P] = (1 - K/S) * 100`.
 
-**Always finish with the COMMAND REFERENCE FOOTER from templates/analysis-report.md** — the "🧭 What you can do next" table — so the user sees exactly which command to run next.
+**Finish with the COMMAND REFERENCE FOOTER from templates/analysis-report.md.** First build for this repo → print the full "🧭 What you can do next" table once. This is a first build (full-analysis ran because no prior graph existed), so print the full table here.
 </process>
 
 <success_criteria>

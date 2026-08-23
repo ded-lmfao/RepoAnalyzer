@@ -13,6 +13,17 @@ Load before proceeding:
 
 Given a natural language description of what the user wants to change, produce a precise, ordered file change plan with exact file paths and line numbers. Do not start making changes — only plan them.
 
+<token_economy>
+**Read from the graph, not the source.** file-index.md already holds the target's file:line, usages, and propagation chain — that is the plan's raw material. Open a source file only at verify-before-edit time (Step 6, one grep) or when the graph is missing the symbol. Re-scanning the repo for something the graph already records is the waste this skill exists to kill.
+
+**Plan size scales with blast radius — do not print a fixed wall of sections.**
+- **SURGICAL** (1–2 files): 2–4 line plan — the file:line + what + any one invariant. Skip the "files NOT changed", "unknowns", and "suggested edit order" sections; they are noise at this size. Per the global rule, proceed to edit without waiting for confirmation.
+- **MODERATE**: numbered file list + invariants. Skip "files NOT changed" unless a near-miss file genuinely needs ruling out.
+- **WIDE / BREAKING**: full Step 4 format, and pause for confirmation before editing.
+
+Never reprint architecture/route/model context from the graph into the plan — reference it (`per file-index.md`), don't quote it.
+</token_economy>
+
 ---
 
 **Step 1 — Parse intent**
@@ -65,6 +76,8 @@ Announce the blast radius before showing the plan.
 
 **Step 4 — Output the change plan**
 
+Pick plan size from blast radius per `<token_economy>`. The full format below is for WIDE / BREAKING; trim sections for SURGICAL / MODERATE.
+
 Format:
 
 ```
@@ -104,12 +117,11 @@ Step 3: Edit [file A] and [file B] in parallel (independent)
 
 ---
 
-**Step 5 — Offer to execute**
+**Step 5 — Execute**
 
-After delivering the plan, ask:
-"Ready to start making these changes? I'll follow the order above and verify each file before editing."
-
-Do not begin editing until the user confirms.
+Gate on blast radius (matches the global rule):
+- **SURGICAL / MODERATE** → proceed to edit immediately following the order above, verifying each file (Step 6). Do not stop to ask.
+- **WIDE / BREAKING** → ask once: "Blast radius is [WIDE/BREAKING] — proceed?" and wait for confirmation before editing.
 
 ---
 
@@ -162,7 +174,9 @@ This step is cheap (one grep per target) and is the difference between a knowled
 - [ ] Edit order accounts for compile-time and runtime dependencies
 - [ ] DB migration need assessed
 - [ ] Frontend impact assessed
-- [ ] User confirmed before any editing begins
+- [ ] Plan size scaled to blast radius (no fixed wall of sections for small edits)
+- [ ] Graph used as plan source; source files opened only at verify-before-edit (no re-scan)
+- [ ] WIDE/BREAKING confirmed before editing; SURGICAL/MODERATE proceeded directly
 - [ ] Each target symbol's current line re-grepped immediately before its edit (verify-before-edit)
 - [ ] Any `(inferred)` fact the change depends on was confirmed by reading before being relied on
 </success_criteria>

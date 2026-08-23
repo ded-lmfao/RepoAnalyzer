@@ -38,9 +38,6 @@ Stale risk:               [LOW / MEDIUM / HIGH]
 [✓] config.md          — [last updated]
 [ ] flows.md           — MISSING (run full analysis to generate)
 
-## What I Can Answer Without Reading Code
-[List 5 questions this knowledge graph can answer instantly]
-
 ## Recommendation
 [One of:]
 - Knowledge is current. No action needed.

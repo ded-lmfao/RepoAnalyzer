@@ -1,0 +1,40 @@
+{
+  "name": "repoanalyzer-copilot",
+  "displayName": "RepoAnalyzer for GitHub Copilot",
+  "description": "RepoAnalyzer repository intelligence skill for GitHub Copilot.",
+  "version": "2.1.0",
+  "publisher": "justnixx",
+  "license": "MIT",
+  "homepage": "https://github.com/ded-lmfao/jinxx-repo-analyzer",
+  "bugs": {
+    "url": "https://github.com/ded-lmfao/jinxx-repo-analyzer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ded-lmfao/jinxx-repo-analyzer"
+  },
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "copilot",
+    "repository analysis",
+    "agent skills",
+    "codebase intelligence"
+  ],
+  "contributes": {
+    "chatSkills": [
+      {
+        "path": "./plugins/repo-analyze/skills/repo-analyze/SKILL.md"
+      }
+    ],
+    "chatPromptFiles": [
+      {
+        "path": "./prompts/repo-analyze.prompt.md"
+      }
+    ]
+  }
+}

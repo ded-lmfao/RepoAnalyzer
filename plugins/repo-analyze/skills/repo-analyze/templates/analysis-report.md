@@ -1,116 +1,66 @@
-Select format based on repo size:
-- **Compact** (fewer than 50 source files): use the compact template below
-- **Full** (50+ source files): use the full template below
+**The full graph lives in `.claude/repo-knowledge/` — the chat report is a receipt, not a copy of it.** Do not reprint route lists, model fields, flows, or config keys in chat; they are already on disk and re-printing them doubles the token cost of the analysis. The user asks follow-ups and you answer from the store.
+
+Default to the **RECEIPT** format below for every repo. Only expand to **DETAIL** if the user explicitly asks for a full written summary in chat (e.g. "give me the whole breakdown here").
 
 ---
 
-# COMPACT FORMAT
+# RECEIPT FORMAT (default)
 
-# [Project Name] — Repository Intelligence Report
+```
+# [Project Name] — analyzed
 
-**Stack:** [language + framework + DB in one line]
-**Type:** [Web API | Frontend | CLI | Library | etc]
-**Entry:** [path → what it starts]
-**Auth:** [mechanism in one line]
+[Stack] · [Type] · [N source files] · Health [X.X/10]
+Entry: [path → what it starts]
+Knowledge store: .claude/repo-knowledge/ (8 files, ~[K] tokens)
+[Top recommendation — only if any health dimension < 7, one line]
 
-**Routes/Commands:** [domain: N routes — one line per domain group]
+Token economy: read [N] files · grep-indexed [M] symbols · store ~[K] tokens (~[P]% smaller than the ~[S]-token source it maps) · confidence [N/M]
+```
 
-**Models:** [Name: key fields → Relations — one line per model]
+`[S]` = rough token size of the source the graph covers; `[P]` = `(1 - K/S) * 100`. This is the recall savings — every future question answered from ~[K] tokens instead of re-reading ~[S].
 
-**Key dependencies:** [hub modules and external services — bullets]
-
-**Critical flow:** [most important flow: trigger → path → outcome]
-
-**Config:** [KEY: what it controls — one line each]
-
-**Health:** [X.X/10] — Doc:[X] Deps:[X] Tests:[X] CI:[X] Activity:[level]
-
-**Knowledge files:** `.claude/repo-knowledge/` — [list files written, including file-index.md]
-
-**Token economy:** Files read: [N] · Symbols grep-indexed: [M] · Store: ~[K] tokens
-
-[End with the COMMAND REFERENCE FOOTER below.]
+Then the COMMAND REFERENCE FOOTER (first build → full table once; later runs → one-liner). Nothing else. Routes, models, flows, config are in the store — point, don't print.
 
 ---
 
-# FULL FORMAT
+# DETAIL FORMAT (only on explicit request)
 
-# [Project Name] — Repository Intelligence Report
+Use only when the user asks for the breakdown in chat. Keep one line per item; never reproduce code or field-by-field model dumps already in the store.
 
-## What This Is
-[2–3 sentences: language, type, purpose, scale]
+```
+# [Project Name] — Repository Intelligence
 
-## Architecture Pattern
-[1–2 sentences: the core architectural pattern]
+What: [2 sentences — language, type, purpose, scale]
+Pattern: [core architectural pattern, 1 line]
 
-## Technology Stack
-[One line per layer — only what actually exists]
-- HTTP: [framework + version]
-- Database: [DB + ORM]
-- Auth: [mechanism]
-- Cache: [if present]
-- Realtime: [if present]
-- Queue: [if present]
-- Frontend: [if present]
+Stack: [one line per real layer: HTTP / DB+ORM / Auth / Cache / Queue / Frontend — omit absent ones]
+Entry: [path → what it starts]
+Modules: [domain: one-sentence responsibility — one line each]
+Routes: [domain group: N routes, auth requirement — one line per group]
+Models: [Name: key fields → relations — one line each]
+Deps: hubs [list+counts] · external [list] · events [if any]
+Flows: [name: trigger → key steps → outcome — one line each]
+Config: [KEY: what it controls — one line each]
 
-## Entry Points
-[path → what it starts]
+Health [X.X/10]: Doc [X] · Deps [X] · Tests [X] · CI [X] · Activity [level]
+Recommendations: [1–3, only for dimensions < 7]
 
-## Module Map
-[domain/module: one-sentence responsibility — all modules, one line each]
-
-## Routes / Commands
-[domain group: N routes/commands, auth requirement — one line per group]
-
-## Data Model
-[ModelName: key_field(type), ... → Relation(type)→OtherModel — one line per model]
-
-## Dependency Highlights
-- Hub modules: [list with importer counts]
-- External services: [list]
-- Event flows: [if present]
-
-## Critical Flows
-[flow name: trigger → [key steps] → outcome — one line each]
-
-## Configuration
-[KEY_NAME: what it controls — one line each]
-
-## Repository Health
-Overall: [X.X/10]
-- Documentation:  [X/10] — [one-line reason]
-- Dependencies:   [X/10] — [N total, N outdated majors]
-- Test Coverage:  [X/10] — [one-line reason]
-- CI/CD Maturity: [X/10] — [one-line reason]
-- Activity Level: [Active | Maintained | Slow | Dormant]
-
-## Top Recommendations
-[1–3 improvements — only if any dimension scores below 7]
-
-## Knowledge Files Written
-[.claude/repo-knowledge/index.md]
-[.claude/repo-knowledge/architecture.md]
-[.claude/repo-knowledge/routes.md]
-[.claude/repo-knowledge/data-model.md]
-[.claude/repo-knowledge/dependencies.md]
-[.claude/repo-knowledge/flows.md]
-[.claude/repo-knowledge/config.md]
-[.claude/repo-knowledge/file-index.md]
-
-## What I Can Answer Without Reading Code Again
-- [5 example questions this knowledge graph now answers instantly]
-
-## Token Economy
-Files read: [N] · Symbols grep-indexed: [M] · Knowledge store: ~[K] tokens
-
-[End with the COMMAND REFERENCE FOOTER below.]
+Store: .claude/repo-knowledge/ — index, architecture, routes, data-model, dependencies, flows, config, file-index
+Token economy: read [N] · grep-indexed [M] · store ~[K] tokens (~[P]% smaller than ~[S]-token source) · confidence [N/M]
+```
 
 ---
 
 # COMMAND REFERENCE FOOTER
 
-**Always print this block at the very bottom of any analysis or update report** (full analysis, `--update`, `--rebuild`). It tells the user exactly which command to run next. Reproduce it verbatim:
+**First build for this repo only** (no prior graph existed): print the full table once so the user learns the commands. On `--update`, `--rebuild`, or any later run where a graph already existed: print the **one-liner** instead — the user has seen the table.
 
+One-liner (default for repeat runs):
+```
+Next: ask me anything (answered from the graph) · `--change <intent>` to plan an edit · `--status` for freshness · `--help` for all commands.
+```
+
+Full table (first build only):
 ```
 ---
 

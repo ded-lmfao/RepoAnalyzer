@@ -21,6 +21,10 @@ Apply before writing anything to the knowledge store. Target: entire codebase in
 - BAD: `A imports B, A imports C, A imports D, A imports E`
 - GOOD: `A is a hub module (12 importers). Imports: B(config), C(db), D(auth).`
 
+**Write the store itself in caveman prose.** Knowledge files are re-read on every future request — index.md on *every* one — so each filler word there is paid again and again. This is the same idea as caveman-compress applied to memory files: drop articles, filler, and hedging inside the knowledge files, use fragments, `[thing]: [fact].` form. The compression compounds across the store's whole lifetime, not just one print.
+- Carve-outs identical to chat output: never compress file:line, paths, symbol names, config keys, code, or quoted error strings. Q&A answers in index.md stay precise — terse, not lossy.
+- Applies to the CLAUDE.md `## Repo Intelligence` section too (it loads into every session).
+
 **Never quote code.** Describe what code does — never reproduce it.
 
 **Never store secret values.** When capturing config, record the key name and what it controls — never the value. If a config file, source file, or `.env` contains an inline credential (API key, password, token, connection string, private key), write `[secret — value not stored]` in its place. The knowledge graph is a structural map, not a copy of the repo's secrets. This holds even if the value is already committed in the repo.

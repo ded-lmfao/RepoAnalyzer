@@ -10,6 +10,7 @@ Thumbs.db
 
 # Generated knowledge graphs from local testing
 .claude/repo-knowledge/
+*.vsix
 
 # Logs
 *.log
